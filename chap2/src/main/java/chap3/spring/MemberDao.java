@@ -1,4 +1,4 @@
-package chap3;
+package chap3.spring;
 
 import java.util.HashMap;
 import java.util.Map;
