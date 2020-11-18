@@ -7,13 +7,19 @@ import java.io.InputStreamReader;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import chap3.config.AppConf1;
+import chap3.config.AppConf2;
+import chap3.config.AppConfImport;
 import chap3.config.AppCtx;
 import chap3.spring.ChangePasswordService;
 import chap3.spring.DuplicateMemberException;
+import chap3.spring.MemberInfoPrinter;
 import chap3.spring.MemberNotFoundException;
 import chap3.spring.MemberRegisterService;
 import chap3.spring.RegisterRequest;
 import chap3.spring.WrongIdPasswordException;
+
+import chap3.spring.MemberListPrinter;
 
 public class MainForSpring {
 	
@@ -21,7 +27,11 @@ public class MainForSpring {
 
 	public static void main(String[] args) throws IOException{
 		// TODO Auto-generated method stub
-		ctx = new AnnotationConfigApplicationContext(AppCtx.class); // spring 컨테이너 생성
+		/*ctx = new AnnotationConfigApplicationContext(AppCtx.class); //spring 컨테이너 생성 */
+		/*ctx = new AnnotationConfigApplicationContext(AppConf1.class, AppConf2.class);
+		// 여러개의 설정 파일로 스프링 컨테이너를 생성 */
+		ctx = new AnnotationConfigApplicationContext(AppConfImport.class);
+		// import로 AppConf2도 같이 사용하게 해서 AppConfImport만으로도 가능하게 됨
 		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		
@@ -38,6 +48,12 @@ public class MainForSpring {
 				continue;
 			} else if(command.startsWith("change ")) {
 				processChangeCommand(command.split(" "));
+				continue;
+			} else if(command.equals("list")) {
+				processListCommand();
+				continue;
+			} else if(command.startsWith("info ")) {
+				processInfoCommand(command.split(" "));
 				continue;
 			}
 			
@@ -94,6 +110,22 @@ public class MainForSpring {
 		System.out.println("Wrong command");
 		System.out.println("Please use this command:");
 		System.out.println("new / change ");
+	}
+	
+	private static void processListCommand() {
+		MemberListPrinter listPrinter = 
+				ctx.getBean("listPrinter", MemberListPrinter.class);
+		listPrinter.printAll();
+	}
+	
+	private static void processInfoCommand(String[] arg) {
+		if(arg.length != 2) {
+			printHelp();
+			return;
+		}
+		MemberInfoPrinter infoPrinter = 
+				ctx.getBean("infoPrinter", MemberInfoPrinter.class);
+		infoPrinter.printMemberInfo(arg[1]);
 	}
 
 }

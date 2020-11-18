@@ -1,5 +1,6 @@
 package chap3.spring;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,5 +20,9 @@ public class MemberDao { // temp DB
 	
 	public void update(Member member) {
 		map.put(member.getEmail(), member);
+	}
+	
+	public Collection<Member> selectAll(){
+		return map.values();
 	}
 }

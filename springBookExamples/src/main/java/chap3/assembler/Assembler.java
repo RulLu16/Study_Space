@@ -10,6 +10,7 @@ public class Assembler {
 	private ChangePasswordService pwdSvc;
 	
 	public Assembler() { // 의존 객체를 주입하는 역할 클래스
+		// 생성자를 통해 객체를 주입하는 방법
 		memberDao = new MemberDao();
 		regSvc = new MemberRegisterService(memberDao);
 		pwdSvc = new ChangePasswordService();
