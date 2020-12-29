@@ -12,5 +12,6 @@ public class MemberController {
     @Autowired
     public MemberController(MemberService memberService){
         this.memberService = memberService;
-    }
+    } // bean 등록된 것들에서 가져와서 주입
+    // 생성자 주입이 처음 만들때 주입 후 수정 불가능하므로 가장 많이 쓰이는 방법
 }
