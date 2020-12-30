@@ -1,6 +1,7 @@
 package com.example.spring;
 
 import com.example.spring.repository.JdbcMemberRepository;
+import com.example.spring.repository.JdbcTemplateMemberRepository;
 import com.example.spring.repository.MemberRepository;
 import com.example.spring.repository.MemoryMemberRepository;
 import com.example.spring.service.MemberService;
@@ -27,7 +28,8 @@ public class SpringConfig {
 
     @Bean
     public MemberRepository memberRepository(){
-        return new JdbcMemberRepository(dataSource);
+        //return new JdbcMemberRepository(dataSource);
+        return new JdbcTemplateMemberRepository(dataSource);
     }
     // 설정파일을 둘 경우, 상황에 따라 구현 클래스를 변경해야 할 때 매우 편리
 }
