@@ -12,7 +12,7 @@ import com.example.core.order.OrderServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
+@Configuration // 없으면 싱글톤을 보장하기 힘들어짐.
 public class AppConfig {
 
     @Bean // 스프링 컨테이너에 등록됨
