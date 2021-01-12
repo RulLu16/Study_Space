@@ -25,4 +25,13 @@ public class ConfigurationSingletonTest {
 
         Assertions.assertThat(memberRepository1).isEqualTo(memberRepository2);
     }
+
+    @Test
+    void configurationDeep(){
+        ApplicationContext ac = new AnnotationConfigApplicationContext(AppConfig.class);
+        AppConfig bean = ac.getBean(AppConfig.class);
+
+        // 등록된 bean을 print해보면, 바이트코드가 조작된 결과를 볼 수 있다.
+        // 이를 등록해서 이미 있는 것은 반환하게 하여 싱글톤을 보장.
+    }
 }
