@@ -33,5 +33,7 @@ public class ConfigurationSingletonTest {
 
         // 등록된 bean을 print해보면, 바이트코드가 조작된 결과를 볼 수 있다.
         // 이를 등록해서 이미 있는 것은 반환하게 하여 싱글톤을 보장.
+        // @configuration이 없으면 바이트코드 조작 x인 순수한 객체만 bean으로 등록됨.
+        // 그러므로 싱글톤이 깨질 가능성이 높음.
     }
 }
