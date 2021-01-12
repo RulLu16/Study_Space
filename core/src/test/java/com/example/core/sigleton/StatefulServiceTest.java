@@ -22,7 +22,7 @@ public class StatefulServiceTest {
 
         //threadA: 주문 금액 조회
         //int price = statefulService1.getPrice();
-        Assertions.assertThat(price1).isNotEqualTo(price2); 
+        Assertions.assertThat(price1).isNotEqualTo(price2);
     }
 
     static class TestConfig{
