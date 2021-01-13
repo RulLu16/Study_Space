@@ -6,7 +6,10 @@ import com.example.core.discount.RateDiscountPolicy;
 import com.example.core.member.MemberRepository;
 import com.example.core.member.MemoryMemberRepository;
 import com.example.core.member.Member;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component("orderService") // 빈 이름 지정도 가능
 public class OrderServiceImpl implements OrderService{
 
     private final MemberRepository memberRepository;
@@ -16,6 +19,7 @@ public class OrderServiceImpl implements OrderService{
     // 이처럼 아예 인터페이스에만 의존하게 해서 설계원칙을 준수 -> but, 구현체를 못 넣으니 에러.
     // 그러므로 누군가가 대신 만들어서 주입해주어야 함.
 
+    @Autowired
     public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy){
         this.memberRepository = memberRepository;
         this.discountPolicy = discountPolicy;
