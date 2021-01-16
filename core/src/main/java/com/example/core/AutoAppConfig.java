@@ -16,9 +16,9 @@ import org.springframework.context.annotation.FilterType;
 )
 public class AutoAppConfig {
 
-    @Bean(name = "memoryMemberRepository")
+    /*@Bean(name = "memoryMemberRepository")
     MemberRepository memberRepository(){
         return new MemoryMemberRepository();
-    } // 수동 등록과 자동등록이 충돌하면 수동 빈 등록이 우선권을 가져 이미 생성된 자동 빈을 override
+    } */ // 수동 등록과 자동등록이 충돌하면 수동 빈 등록이 우선권을 가져 이미 생성된 자동 빈을 override
     // 하지만 최근에는 수동과 자동이 충돌하면 에러를 띄우도록 바뀌고 있음.
 }
