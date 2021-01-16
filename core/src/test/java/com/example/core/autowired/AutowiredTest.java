@@ -22,7 +22,7 @@ public class AutowiredTest {
         public void setNoBean1(Member member){
             // 없으면 메소드 자체가 호출 x
         }
-        
+
         @Autowired
         public void setNoBean2(@Nullable Member member){
             // 없으면 null이 들어감
