@@ -4,7 +4,7 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+import javax.annotation.PreDestroy; // javax = spring에 종속적이지 않고 자바 표준이기 때문에 다른 자바에도 쓸 수 있음.
 
 public class NetworkClient /*implements InitializingBean, DisposableBean*/ { // 임시 네트워크
 
@@ -40,6 +40,7 @@ public class NetworkClient /*implements InitializingBean, DisposableBean*/ { // 
     }
 
     @PreDestroy // annotation을 사용해 편리하게 관리. 주로 이것을 사용!
+    // 다만 외부 라이브러리에는 적용이 힘들기 때문에 이전에 bean에 속성 붙이는 것을 사용
     public void close() {
         disconnect();
     }
