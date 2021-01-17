@@ -22,7 +22,7 @@ public class BeanLifeCycleTest {
     @Configuration
     static class LifeCycleConfig{
 
-        @Bean(initMethod = "init", destroyMethod = "close") // init과 close 메소드를 지정할 수 있음
+        @Bean//(initMethod = "init", destroyMethod = "close") // init과 close 메소드를 지정할 수 있음
         // destroyMethod는 특이하게 close를 명시하지 않아도 close, shutdown등의 이름 메소드를 추론하여 호출한다.
         public NetworkClient networkClient(){
             NetworkClient networkClient = new NetworkClient();

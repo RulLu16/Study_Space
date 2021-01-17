@@ -3,6 +3,9 @@ package com.example.core.lifecycle;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 public class NetworkClient /*implements InitializingBean, DisposableBean*/ { // 임시 네트워크
 
     private String url;
@@ -30,11 +33,13 @@ public class NetworkClient /*implements InitializingBean, DisposableBean*/ { // 
         System.out.println("close");
     }
 
+    @PostConstruct
     public void init(){
         connect();
         call("init message");
     }
 
+    @PreDestroy // annotation을 사용해 편리하게 관리. 주로 이것을 사용!
     public void close() {
         disconnect();
     }
