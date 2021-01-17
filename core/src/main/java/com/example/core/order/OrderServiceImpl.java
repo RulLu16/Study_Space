@@ -8,13 +8,14 @@ import com.example.core.member.MemoryMemberRepository;
 import com.example.core.member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component("orderService") // 빈 이름 지정도 가능
-@RequiredArgsConstructor // final 붙은 필수 값에 대한 생성자를 만들어줌 -lombok
+//@RequiredArgsConstructor // final 붙은 필수 값에 대한 생성자를 만들어줌 -lombok
 public class OrderServiceImpl implements OrderService{
 
-    // @Autowired // 필드 자동 의존주입.
+    // @Autowired // 필드 자동 의존주입. 타입으로 조회하기 때문에 중복이면 문제발생할 수 있음
     // 외부에서 변경이 불가능해 테스트가 힘들고, DI 프레임워크가 없으면 아무것도 못함 => 사용 하지 말자..
     private final MemberRepository memberRepository;
     private final DiscountPolicy discountPolicy;
@@ -24,10 +25,16 @@ public class OrderServiceImpl implements OrderService{
     // 그러므로 누군가가 대신 만들어서 주입해주어야 함.
 
     /*@Autowired // 생성자가 하나면 생략해도 스프링 빈 사용시 자동 주입해줌.
-    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy){
+    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy rateDiscountPolicy){
         this.memberRepository = memberRepository;
-        this.discountPolicy = discountPolicy;
+        this.discountPolicy = rateDiscountPolicy; // 중복 시 필드 명 또는 파라미터 이름으로 다시 매칭
     }*/
+
+    @Autowired
+    public OrderServiceImpl(MemberRepository memberRepository, /*@Qualifier("mainDiscountPolicy")*/ DiscountPolicy discountPolicy){
+        this.memberRepository = memberRepository;
+        this.discountPolicy = discountPolicy; //qualifier를 사용해 해당 이름의 빈을 찾아서 넣음.
+    }
 
     /*@Autowired // setter를 통해 의존 자동 주입
     public void setMemberRepository(MemberRepository memberRepository){
