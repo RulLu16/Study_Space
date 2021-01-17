@@ -1,5 +1,6 @@
 package com.example.core.order;
 
+import com.example.core.annotation.MainDiscountPolicy;
 import com.example.core.discount.DiscountPolicy;
 import com.example.core.discount.FixDiscountPolicy;
 import com.example.core.discount.RateDiscountPolicy;
@@ -31,9 +32,11 @@ public class OrderServiceImpl implements OrderService{
     }*/
 
     @Autowired
-    public OrderServiceImpl(MemberRepository memberRepository, /*@Qualifier("mainDiscountPolicy")*/ DiscountPolicy discountPolicy){
+    public OrderServiceImpl(MemberRepository memberRepository, /*@Qualifier("mainDiscountPolicy")*/
+                            @MainDiscountPolicy DiscountPolicy discountPolicy){
         this.memberRepository = memberRepository;
         this.discountPolicy = discountPolicy; //qualifier를 사용해 해당 이름의 빈을 찾아서 넣음.
+        // 직접 만든 어노테이션으로 적용 가능
     }
 
     /*@Autowired // setter를 통해 의존 자동 주입
