@@ -10,12 +10,14 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.pedro.library.AutoPermissions;
 import com.pedro.library.AutoPermissionsListener;
 import com.stanfy.gsonxml.GsonXml;
 import com.stanfy.gsonxml.GsonXmlBuilder;
@@ -26,13 +28,15 @@ import org.techtown.diary.data.WeatherResult;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements OnTabItemSelectedListener, OnRequestListener, AutoPermissionsListener, MyApplication.OnResponseListener{
+public class MainActivity extends AppCompatActivity implements OnTabItemSelectedListener, OnRequestListener, AutoPermissionsListener, MyApplication.OnResponseListener {
     private static final String TAG = "MainActivity";
 
     Fragment1 fragment1;
@@ -44,11 +48,21 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
     Location currentLocation;
     GPSListener gpsListener;
 
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmm");
+    SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH시");
+    SimpleDateFormat dateFormat3 = new SimpleDateFormat("MM월 dd일");
+    SimpleDateFormat dateFormat4 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     int locationCount = 0;
     String currentWeather;
     String currentAddress;
     String currentDateString;
     Date currentDate;
+
+    /**
+     * 데이터베이스 인스턴스
+     */
+    public static NoteDatabase mDatabase = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,54 +73,124 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
         fragment2 = new Fragment2();
         fragment3 = new Fragment3();
 
-        // 첫번째 프레임 레이아웃에 추가
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment1).commit();
 
         bottomNavigation = findViewById(R.id.bottom_navigation);
-        bottomNavigation.setOnNavigationItemSelectedListener(
-                new BottomNavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        switch (item.getItemId()){
-                            case R.id.tab1:
-                                Toast.makeText(getApplicationContext(),
-                                        "first tab selected", Toast.LENGTH_LONG).show();
-                                getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment1).commit();
+        bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.tab1:
+                        Toast.makeText(getApplicationContext(), "첫 번째 탭 선택됨", Toast.LENGTH_LONG).show();
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.container, fragment1).commit();
 
-                                return true;
+                        return true;
+                    case R.id.tab2:
+                        Toast.makeText(getApplicationContext(), "두 번째 탭 선택됨", Toast.LENGTH_LONG).show();
 
-                            case R.id.tab2:
-                                Toast.makeText(getApplicationContext(),
-                                        "second tab selected", Toast.LENGTH_LONG).show();
-                                getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment2).commit();
+                        fragment2 = new Fragment2();
 
-                                return true;
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.container, fragment2).commit();
 
-                            case R.id.tab3:
-                                Toast.makeText(getApplicationContext(),
-                                        "third tab selected", Toast.LENGTH_LONG).show();
-                                getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment3).commit();
+                        return true;
+                    case R.id.tab3:
+                        Toast.makeText(getApplicationContext(), "세 번째 탭 선택됨", Toast.LENGTH_LONG).show();
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.container, fragment3).commit();
 
-                                return true;
-                        }
-
-                        return false;
-                    }
+                        return true;
                 }
-        );
+
+                return false;
+            }
+        });
+
+        AutoPermissions.Companion.loadAllPermissions(this, 101);
+
+        setPicturePath();
+
+
+        // 데이터베이스 열기
+        openDatabase();
+
     }
 
     @Override
-    public void onTabSelected(int position){
-        if(position == 0){
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (mDatabase != null) {
+            mDatabase.close();
+            mDatabase = null;
+        }
+    }
+
+    /**
+     * 데이터베이스 열기 (데이터베이스가 없을 때는 만들기)
+     */
+    public void openDatabase() {
+        // open database
+        if (mDatabase != null) {
+            mDatabase.close();
+            mDatabase = null;
+        }
+
+        mDatabase = NoteDatabase.getInstance(this);
+        boolean isOpen = mDatabase.open();
+        if (isOpen) {
+            Log.d(TAG, "Note database is open.");
+        } else {
+            Log.d(TAG, "Note database is not open.");
+        }
+    }
+
+
+
+    public void setPicturePath() {
+        String sdcardPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+        AppConstants.FOLDER_PHOTO = sdcardPath + File.separator + "photo";
+    }
+
+    public void onTabSelected(int position) {
+        if (position == 0) {
             bottomNavigation.setSelectedItemId(R.id.tab1);
-        }
-        else if(position == 1){
-            bottomNavigation.setSelectedItemId(R.id.tab2);
-        }
-        else{
+        } else if (position == 1) {
+            fragment2 = new Fragment2();
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, fragment2).commit();
+        } else if (position == 2) {
             bottomNavigation.setSelectedItemId(R.id.tab3);
         }
+    }
+
+    public void showFragment2(Note item) {
+
+        fragment2 = new Fragment2();
+        fragment2.setItem(item);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, fragment2).commit();
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        AutoPermissions.Companion.parsePermissions(this, requestCode, permissions, this);
+    }
+
+    @Override
+    public void onDenied(int requestCode, String[] permissions) {
+        Toast.makeText(this, "permissions denied : " + permissions.length, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onGranted(int requestCode, String[] permissions) {
+        Toast.makeText(this, "permissions granted : " + permissions.length, Toast.LENGTH_LONG).show();
     }
 
     public void onRequest(String command) {
@@ -117,10 +201,11 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
         }
     }
 
+
     public void getCurrentLocation() {
         // set current time
         currentDate = new Date();
-        currentDateString = AppConstants.dateFormat3.format(currentDate);
+        currentDateString = dateFormat3.format(currentDate);
         if (fragment2 != null) {
             fragment2.setDateString(currentDateString);
         }
@@ -168,16 +253,6 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
         }
     }
 
-    @Override
-    public void onDenied(int requestCode, String[] permissions) {
-        Toast.makeText(this, "permissions denied : " + permissions.length, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onGranted(int requestCode, String[] permissions) {
-        Toast.makeText(this, "permissions granted : " + permissions.length, Toast.LENGTH_LONG).show();
-    }
-
     class GPSListener implements LocationListener {
         public void onLocationChanged(Location location) {
             currentLocation = location;
@@ -199,7 +274,6 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
         public void onProviderEnabled(String provider) { }
 
         public void onStatusChanged(String provider, int status, Bundle extras) { }
-
     }
 
     public void getCurrentAddress() {
@@ -217,7 +291,12 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
 
         if (addresses != null && addresses.size() > 0) {
             Address address = addresses.get(0);
-            currentAddress = address.getLocality() + " " + address.getSubLocality();
+
+            currentAddress = address.getLocality();
+            if (address.getSubLocality() != null) {
+                currentAddress += " " + address.getSubLocality();
+            }
+
             String adminArea = address.getAdminArea();
             String country = address.getCountryName();
             println("Address : " + country + " " + adminArea + " " + currentAddress);
@@ -276,8 +355,8 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
 
                 // 현재 기준 시간
                 try {
-                    Date tmDate = AppConstants.dateFormat.parse(weather.header.tm);
-                    String tmDateText = AppConstants.dateFormat2.format(tmDate);
+                    Date tmDate = dateFormat.parse(weather.header.tm);
+                    String tmDateText = dateFormat2.format(tmDate);
                     println("기준 시간 : " + tmDateText);
 
                     for (int i = 0; i < weather.body.datas.size(); i++) {
@@ -287,7 +366,7 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
                         println("  기온 : " + item.temp + " C");
                         println("  강수확률 : " + item.pop + "%");
 
-                        println("debug 1 : " + (int)Math.round(item.ws * 10));
+                        //println("debug 1 : " + (int)Math.round(item.ws * 10));
                         float ws = Float.valueOf(String.valueOf((int)Math.round(item.ws * 10))) / 10.0f;
                         println("  풍속 : " + ws + " m/s");
                     }
@@ -299,8 +378,8 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
                         fragment2.setWeather(item.wfKor);
                     }
 
-                    // stop request location service after 2 times
-                    if (locationCount > 1) {
+                    // stop request location service after 1 times
+                    if (locationCount > 0) {
                         stopLocationService();
                     }
 
@@ -325,4 +404,5 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
     private void println(String data) {
         Log.d(TAG, data);
     }
+
 }

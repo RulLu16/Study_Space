@@ -27,6 +27,7 @@ import androidx.fragment.app.Fragment;
 import com.github.channguyen.rsv.RangeSliderView;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.Date;
 
 public class Fragment2 extends Fragment {
@@ -125,6 +126,12 @@ public class Fragment2 extends Fragment {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(mMode == AppConstants.MODE_INSERT) {
+                    saveNote();
+                } else if(mMode == AppConstants.MODE_MODIFY) {
+                    modifyNote();
+                }
+
                 if (listener != null) {
                     listener.onTabSelected(0);
                 }
@@ -136,6 +143,7 @@ public class Fragment2 extends Fragment {
             @Override
             public void onClick(View v) {
                 if (listener != null) {
+                    deleteNote();
                     listener.onTabSelected(0);
                 }
             }
@@ -461,5 +469,112 @@ public class Fragment2 extends Fragment {
         return inSampleSize;
     }
 
+    /**
+     * 데이터베이스 레코드 추가
+     */
+    private void saveNote() {
+        String address = locationTextView.getText().toString();
+        String contents = contentsInput.getText().toString();
+
+        String picturePath = savePicture();
+
+        String sql = "insert into " + NoteDatabase.TABLE_NOTE +
+                "(WEATHER, ADDRESS, LOCATION_X, LOCATION_Y, CONTENTS, MOOD, PICTURE) values(" +
+                "'"+ weatherIndex + "', " +
+                "'"+ address + "', " +
+                "'"+ "" + "', " +
+                "'"+ "" + "', " +
+                "'"+ contents + "', " +
+                "'"+ moodIndex + "', " +
+                "'"+ picturePath + "')";
+
+        Log.d(TAG, "sql : " + sql);
+        NoteDatabase database = NoteDatabase.getInstance(context);
+        database.execSQL(sql);
+
+    }
+
+    private String createFilename() {
+        Date curDate = new Date();
+        String curDateStr = String.valueOf(curDate.getTime());
+
+        return curDateStr;
+    }
+
+    private String savePicture() {
+        if (resultPhotoBitmap == null) {
+            AppConstants.println("No picture to be saved.");
+            return "";
+        }
+
+        File photoFolder = new File(AppConstants.FOLDER_PHOTO);
+
+        if(!photoFolder.isDirectory()) {
+            Log.d(TAG, "creating photo folder : " + photoFolder);
+            photoFolder.mkdirs();
+        }
+
+        String photoFilename = createFilename();
+        String picturePath = photoFolder + File.separator + photoFilename;
+
+        try {
+            FileOutputStream outstream = new FileOutputStream(picturePath);
+            resultPhotoBitmap.compress(Bitmap.CompressFormat.PNG, 100, outstream);
+            outstream.close();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        return picturePath;
+    }
+
+
+    /**
+     * 데이터베이스 레코드 수정
+     */
+    private void modifyNote() {
+        if (item != null) {
+            String address = locationTextView.getText().toString();
+            String contents = contentsInput.getText().toString();
+
+            String picturePath = savePicture();
+
+            // update note
+            String sql = "update " + NoteDatabase.TABLE_NOTE +
+                    " set " +
+                    "   WEATHER = '" + weatherIndex + "'" +
+                    "   ,ADDRESS = '" + address + "'" +
+                    "   ,LOCATION_X = '" + "" + "'" +
+                    "   ,LOCATION_Y = '" + "" + "'" +
+                    "   ,CONTENTS = '" + contents + "'" +
+                    "   ,MOOD = '" + moodIndex + "'" +
+                    "   ,PICTURE = '" + picturePath + "'" +
+                    " where " +
+                    "   _id = " + item._id;
+
+            Log.d(TAG, "sql : " + sql);
+            NoteDatabase database = NoteDatabase.getInstance(context);
+            database.execSQL(sql);
+        }
+    }
+
+
+    /**
+     * 레코드 삭제
+     */
+    private void deleteNote() {
+        AppConstants.println("deleteNote called.");
+
+        if (item != null) {
+            // delete note
+            String sql = "delete from " + NoteDatabase.TABLE_NOTE +
+                    " where " +
+                    "   _id = " + item._id;
+
+            Log.d(TAG, "sql : " + sql);
+            NoteDatabase database = NoteDatabase.getInstance(context);
+            database.execSQL(sql);
+        }
+    }
 
 }
