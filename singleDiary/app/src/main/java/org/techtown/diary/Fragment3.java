@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.github.mikephil.charting.charts.BarChart;
@@ -156,15 +157,15 @@ public class Fragment3 extends Fragment {
         ArrayList<PieEntry> entries = new ArrayList<>();
 
         entries.add(new PieEntry(20.0f, "",
-                getResources().getDrawable(R.drawable.smile1_24)));
+                ContextCompat.getDrawable(getContext(), R.drawable.smile1_24)));
         entries.add(new PieEntry(20.0f, "",
-                getResources().getDrawable(R.drawable.smile2_24)));
+                ContextCompat.getDrawable(getContext(), R.drawable.smile2_24)));
         entries.add(new PieEntry(20.0f, "",
-                getResources().getDrawable(R.drawable.smile3_24)));
+                ContextCompat.getDrawable(getContext(), R.drawable.smile3_24)));
         entries.add(new PieEntry(20f, "",
-                getResources().getDrawable(R.drawable.smile4_24)));
+                ContextCompat.getDrawable(getContext(), R.drawable.smile4_24)));
         entries.add(new PieEntry(20.0f, "",
-                getResources().getDrawable(R.drawable.smile5_24)));
+                ContextCompat.getDrawable(getContext(), R.drawable.smile5_24)));
 
         PieDataSet dataSet = new PieDataSet(entries, "기분별 비율");
 
