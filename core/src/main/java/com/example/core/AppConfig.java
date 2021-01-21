@@ -25,10 +25,11 @@ public class AppConfig {
         return new MemoryMemberRepository();
     }
 
-    @Bean
+    /*@Bean
     public OrderService orderService(){
-        return new OrderServiceImpl(memberRepository(), discountPolicy());
-    } // 이렇게 주입하는 역할을 부여하므로써 DIP를 완성
+        //return new OrderServiceImpl(memberRepository(), discountPolicy());
+        return null;
+    } // 이렇게 주입하는 역할을 부여하므로써 DIP를 완성*/
 
     @Bean
     public DiscountPolicy discountPolicy(){
