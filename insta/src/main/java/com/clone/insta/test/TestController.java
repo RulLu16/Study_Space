@@ -1,6 +1,6 @@
 package com.clone.insta.test;
 
-import com.clone.insta.model.Follow;
+import com.clone.insta.model.Follow; // ㅇㄴ.. ide 캐시 날리고 restart했더니 귀신같이 잘됨..
 import com.clone.insta.model.Image;
 import com.clone.insta.model.Likes;
 import com.clone.insta.model.User;
