@@ -1,5 +1,6 @@
 package com.clone.insta.test;
 
+import com.clone.insta.model.Follow;
 import com.clone.insta.model.Image;
 import com.clone.insta.model.Likes;
 import com.clone.insta.model.User;
@@ -19,7 +20,8 @@ public class TestController {
     }
 
     @GetMapping("/test/user")
-    public @ResponseBody User getUser() {
+    public @ResponseBody
+    User getUser() {
         User user = new User();
         user.setId(1);
         user.setLoginId("cos");
@@ -50,7 +52,8 @@ public class TestController {
     }
 
     @GetMapping("/test/image")
-    public @ResponseBody Image getImage() {
+    public @ResponseBody
+    Image getImage() {
         User user = new User();
         user.setId(1);
         user.setLoginId("cos");
@@ -69,7 +72,8 @@ public class TestController {
     }
 
     @GetMapping("/test/images")
-    public @ResponseBody List<Image> getImages(){
+    public @ResponseBody
+    List<Image> getImages() {
         User user = new User();
         user.setId(1);
         user.setLoginId("cos");
@@ -122,5 +126,52 @@ public class TestController {
         like.setImage(img1);
 
         return like;
+    }
+
+    @GetMapping("/test/follows")
+    public @ResponseBody
+    List<Follow> getFollows() {
+        User user1 = new User();
+        user1.setId(1);
+        user1.setLoginId("cos");
+        user1.setName("홍길동");
+        user1.setEmail("cos@nate.com");
+        user1.setProfileImage("my.jpg");
+
+        User user2 = new User();
+        user2.setId(2);
+        user2.setLoginId("ssar");
+        user2.setName("장동건");
+        user2.setEmail("ssar@nate.com");
+        user2.setProfileImage("you.jpg");
+
+        User user3 = new User();
+        user3.setId(3);
+        user3.setLoginId("love");
+        user3.setName("장보고");
+        user3.setEmail("love@nate.com");
+        user3.setProfileImage("love.jpg");
+
+        Follow follow1 = new Follow();
+        follow1.setId(1);
+        follow1.setFromUser(user1);
+        follow1.setToUser(user2);
+
+        Follow follow2 = new Follow();
+        follow2.setId(2);
+        follow2.setFromUser(user1);
+        follow2.setToUser(user3);
+
+        Follow follow3 = new Follow();
+        follow3.setId(3);
+        follow3.setFromUser(user2);
+        follow3.setToUser(user1);
+
+        List<Follow> follows = new ArrayList<Follow>();
+        follows.add(follow1);
+        follows.add(follow2);
+        follows.add(follow3);
+
+        return follows;
     }
 }
