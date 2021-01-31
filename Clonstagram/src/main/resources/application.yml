@@ -42,4 +42,4 @@ spring:
       password: 1234
 
 file:
-  path: C:/Users/may05/Desktop/study/insta/src/main/resources/upload/
+  path: C:/Users/may05/Desktop/study/Clonstagram/src/main/resources/upload/

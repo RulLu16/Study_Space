@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
+<!-- front와 퍼블리셔의 차이를 이해 못했는데, html, css 등으로
+     전체적인 디자인 틀을 잡는게 퍼블리셔나 웹디자이너가 하는일이고
+     front는 거기서 필요한 로직을 코딩하고 백으로 받은 데이터를 처리하는 역할인 것 같다..
+     드디어 차이가 뭔지 조금 감이 잡힌 것 같다. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
