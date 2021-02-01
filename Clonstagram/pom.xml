@@ -63,6 +63,12 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-taglibs</artifactId>
+			<version>4.2.4.RELEASE</version>
+		</dependency>
+
 		<!-- jsp 템플릿 엔진 -->
 		<dependency>
 			<groupId>org.apache.tomcat</groupId>
