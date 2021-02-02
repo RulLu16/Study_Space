@@ -24,7 +24,7 @@ public class TestController {
     User getUser() {
         User user = new User();
         user.setId(1);
-        user.setLoginId("cos");
+        user.setUsername("cos");
         user.setName("홍길동");
         user.setEmail("cos@nate.com");
         user.setProfileImage("my.jpg");
@@ -56,7 +56,7 @@ public class TestController {
     Image getImage() {
         User user = new User();
         user.setId(1);
-        user.setLoginId("cos");
+        user.setUsername("cos");
         user.setName("홍길동");
         user.setEmail("cos@nate.com");
         user.setProfileImage("my.jpg");
@@ -76,7 +76,7 @@ public class TestController {
     List<Image> getImages() {
         User user = new User();
         user.setId(1);
-        user.setLoginId("cos");
+        user.setUsername("cos");
         user.setName("홍길동");
         user.setEmail("cos@nate.com");
         user.setProfileImage("my.jpg");
@@ -108,7 +108,7 @@ public class TestController {
     Likes getLike() {
         User user = new User();
         user.setId(1);
-        user.setLoginId("cos");
+        user.setUsername("cos");
         user.setName("홍길동");
         user.setEmail("cos@nate.com");
         user.setProfileImage("my.jpg");
@@ -133,21 +133,21 @@ public class TestController {
     List<Follow> getFollows() {
         User user1 = new User();
         user1.setId(1);
-        user1.setLoginId("cos");
+        user1.setUsername("cos");
         user1.setName("홍길동");
         user1.setEmail("cos@nate.com");
         user1.setProfileImage("my.jpg");
 
         User user2 = new User();
         user2.setId(2);
-        user2.setLoginId("ssar");
+        user2.setUsername("ssar");
         user2.setName("장동건");
         user2.setEmail("ssar@nate.com");
         user2.setProfileImage("you.jpg");
 
         User user3 = new User();
         user3.setId(3);
-        user3.setLoginId("love");
+        user3.setUsername("love");
         user3.setName("장보고");
         user3.setEmail("love@nate.com");
         user3.setProfileImage("love.jpg");
