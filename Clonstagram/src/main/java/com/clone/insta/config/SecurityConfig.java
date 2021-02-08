@@ -29,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().disable();
         http.authorizeRequests()
                 // http request로 보낼 때 파일 경로 설정을.. 잘못해서 이미지 경로 안맞았음. 수정완료
-                .antMatchers("/user/**", "/follow/**", "/image/**")
+                .antMatchers("/", "/user/**", "/follow/**", "/image/**")
                 .authenticated()
                 .anyRequest()
                 .permitAll()
