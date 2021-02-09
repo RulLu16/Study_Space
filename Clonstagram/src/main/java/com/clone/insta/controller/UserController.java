@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller // ㅇㄴ.. controller 추가 안해놓고 왜 getmapping 못하나 찾고있었다..
@@ -45,5 +46,12 @@ public class UserController {
 
         // 로그인 화면으로 전환
         return "redirect:/auth/login";
+    }
+
+    @GetMapping("/user/{id}")
+    public String profile(@PathVariable int id){
+        // id를 통해 유저 검색
+
+        return "user/profile";
     }
 }

@@ -30,6 +30,9 @@
             <div class="profile__title">
                 <h1>serranoarevalo</h1>
                 <a href="edit-profile.html">
+                    <button class="follow_btn">팔로우</button>
+                </a>
+                <a href="edit-profile.html">
                     <button>Edit Profile</button>
                 </a>
                 <i class="fa fa-cog fa-lg"></i>

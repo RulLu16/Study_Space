@@ -262,3 +262,23 @@
 .profile__overlay-link:hover {
   background: #efefef;
 }
+
+.following_btn {
+  height: 30px;
+  width: 80px;
+  background-color: transparent;
+  color: black;
+  border-radius: 5px;
+  border: 1px solid dbdbdb;
+  font-weight: 600;
+}
+
+.follow_btn {
+  height: 30px;
+  width: 80px;
+  background-color: #3c88de;
+  color: white;
+  border-radius: 5px;
+  border: 0px;
+  font-weight: 600;
+}
