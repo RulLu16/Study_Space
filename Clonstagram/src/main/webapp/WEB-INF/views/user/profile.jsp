@@ -31,16 +31,32 @@
                 <h1>serranoarevalo</h1>
                 <c:choose>
                     <c:when test="${followCheck eq 1}">
-                        <a href="edit-profile.html">
-                            <button class="profile_edit_btn">팔로잉</button>
-                        </a> <!-- 이미 팔로우 한 상태 -->
+                        <button onclick="follow(false)" class="profile_edit_btn">팔로잉</button>
+                        <!-- 이미 팔로우 한 상태 -->
                     </c:when>
                     <c:otherwise>
-                        <a href="edit-profile.html">
-                            <button class="follow_btn">팔로우</button>
-                        </a>
+                        <button onclick="follow(true)" class="follow_btn">팔로우</button>
                     </c:otherwise>
                 </c:choose>
+
+                <script>
+                    function follow(check){
+                        let url ="/follow/${toUser.id}"
+                        if(check){
+                            fetch(url, {
+                                method: "POST"
+                            }).then(function(res){
+                                return res.text();
+                            }).then(function(res){
+                                if(result == "ok"){
+
+                                }
+                            });
+                        }else{
+
+                        }
+                    }
+                </script>
 
                 <a href="edit-profile.html">
                     <button>Edit Profile</button>
@@ -207,6 +223,7 @@
 </div>
 
 <%@ include file="../include/footer.jsp" %>
+<script src="/js/follow.js"></script>
 
 <script>
     $(function() {

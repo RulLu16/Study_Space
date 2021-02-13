@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.Optional;
+
 @Controller // ㅇㄴ.. controller 추가 안해놓고 왜 getmapping 못하나 찾고있었다..
 public class UserController {
 
@@ -58,6 +60,10 @@ public class UserController {
     @GetMapping("/user/{id}")
     public String profile(@PathVariable int id, @AuthenticationPrincipal MyUserDetail userDetail, Model model){
         // id를 통해 유저 검색
+
+        Optional<User> oToUser = userRepository.findById(id);
+        User toUser = oToUser.get();
+        model.addAttribute("toUser", toUser);
 
         // follow check, 1 = folow, 0 = unfollow
         User user = userDetail.getUser();
