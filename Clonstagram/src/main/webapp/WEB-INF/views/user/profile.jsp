@@ -29,9 +29,19 @@
         <div class="profile__info">
             <div class="profile__title">
                 <h1>serranoarevalo</h1>
-                <a href="edit-profile.html">
-                    <button class="follow_btn">팔로우</button>
-                </a>
+                <c:choose>
+                    <c:when test="${followCheck eq 1}">
+                        <a href="edit-profile.html">
+                            <button class="profile_edit_btn">팔로잉</button>
+                        </a> <!-- 이미 팔로우 한 상태 -->
+                    </c:when>
+                    <c:otherwise>
+                        <a href="edit-profile.html">
+                            <button class="follow_btn">팔로우</button>
+                        </a>
+                    </c:otherwise>
+                </c:choose>
+
                 <a href="edit-profile.html">
                     <button>Edit Profile</button>
                 </a>

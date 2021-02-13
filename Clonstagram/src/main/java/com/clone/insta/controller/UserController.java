@@ -1,12 +1,16 @@
 package com.clone.insta.controller;
 
 import com.clone.insta.model.User;
+import com.clone.insta.repository.FollowRepository;
 import com.clone.insta.repository.UserRepository;
+import com.clone.insta.service.MyUserDetail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +25,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private FollowRepository followRepository;
 
     @GetMapping("/auth/login")
     public String authLogin(){
@@ -49,8 +56,15 @@ public class UserController {
     }
 
     @GetMapping("/user/{id}")
-    public String profile(@PathVariable int id){
+    public String profile(@PathVariable int id, @AuthenticationPrincipal MyUserDetail userDetail, Model model){
         // id를 통해 유저 검색
+
+        // follow check, 1 = folow, 0 = unfollow
+        User user = userDetail.getUser();
+        int followCheck = followRepository.countByFromUserIdAndToUserId(user.getId(), id);
+
+        log.info("followCheck: " + followCheck);
+        model.addAttribute("followCheck", followCheck);
 
         return "user/profile";
     }
