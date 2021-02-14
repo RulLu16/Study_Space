@@ -4,16 +4,28 @@ import com.clone.insta.model.Follow; // ㅇㄴ.. ide 캐시 날리고 restart했
 import com.clone.insta.model.Image;
 import com.clone.insta.model.Likes;
 import com.clone.insta.model.User;
+import com.clone.insta.repository.ImageRepository;
 import com.clone.insta.repository.UserRepository;
+import com.clone.insta.service.MyUserDetail;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.AsynchronousFileChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.Future;
 
 @Controller
 public class TestController {
@@ -21,6 +33,11 @@ public class TestController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ImageRepository imageRepository;
+
+    @Value("${file.path}")
+    private String fileRealPath;
 
     @GetMapping("/test/user/{id}")
     public @ResponseBody User testUser(@PathVariable int id){
@@ -28,6 +45,36 @@ public class TestController {
         User user = Ouser.get();
 
         return user;
+    }
+
+    @PostMapping("/test/image/uploadProc")
+    public String testImageProc(@AuthenticationPrincipal MyUserDetail userDetail,
+                                @RequestParam("file") MultipartFile file,
+                                @RequestParam("caption") String caption,
+                                @RequestParam("location") String location,
+                                @RequestParam("tags") String tags) throws IOException{
+        // image upload 수행
+        UUID uuid = UUID.randomUUID();
+        String uuidFilename = uuid + "_" + file.getOriginalFilename();
+        Path filePath = Paths.get(fileRealPath + uuidFilename);
+
+        if(!Files.exists(filePath)){
+            Files.createFile(filePath);
+        }
+
+        // image 동기처리 하기
+        AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(filePath, StandardOpenOption.WRITE);
+
+        ByteBuffer buffer = ByteBuffer.allocate((int)file.getSize());
+        buffer.put(file.getBytes());
+        buffer.flip();
+
+        Future<Integer> operation = fileChannel.write(buffer, 0);
+        buffer.clear();
+
+        while(!operation.isDone());
+
+        return "redirect:/";
     }
 
     @GetMapping("/test/home")

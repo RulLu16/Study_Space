@@ -11,8 +11,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,8 +45,15 @@ public class ImageController {
     private TagRepository tagRepository;
 
     @GetMapping({"/","/image/feed"})
-    public String imageFeed(@AuthenticationPrincipal MyUserDetail userDetail){
-        log.info("username: " + userDetail.getUsername());
+    public String imageFeed(
+            @AuthenticationPrincipal MyUserDetail userDetail,
+            @PageableDefault(size = 3, sort = "id", direction = Sort.Direction.DESC)Pageable pageable,
+            Model model){
+
+        // follow 한 사람들 사진
+        Page<Image> pageImages = imageRepository.findImage(userDetail.getUser().getId(), pageable);
+        List<Image> images = pageImages.getContent();
+        model.addAttribute("images", images);
 
         return "image/feed";
     }
@@ -57,17 +69,13 @@ public class ImageController {
             @RequestParam("file") MultipartFile file,
             @RequestParam("caption") String caption,
             @RequestParam("location") String location,
-            @RequestParam("tags") String tags){
+            @RequestParam("tags") String tags) throws IOException{
 
         UUID uuid = UUID.randomUUID();
         String uuidFilename = uuid + "_" + file.getOriginalFilename();
         Path filePath = Paths.get(fileRealPath + uuidFilename);
 
-        try{
-            Files.write(filePath, file.getBytes()); // hard disk history
-        }catch(IOException e){
-            e.printStackTrace();
-        }
+        Files.write(filePath, file.getBytes()); // hard disk history
 
         User principal = userDetail.getUser();
 
