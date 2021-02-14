@@ -27,9 +27,15 @@ public class Image {
     private User user;
     // 즉, image와 user가 manytoone 관계로 매핑되어 있고 userId라는 column으로 어느 것이 매핑되어 있는지 구분
 
+    // like list
     @OneToMany(mappedBy = "image")
     @JsonManagedReference
     private List<Likes> likes = new ArrayList<>();
+
+    // tag list
+    @OneToMany(mappedBy = "image")
+    @JsonManagedReference // 객체의 상위 하위 관계 명시하여 순환 참조 방지
+    private List<Tag> tags = new ArrayList<>();
 
     @Transient // db에 영향을 미치지 않음
     private int likeCount;
