@@ -31,10 +31,10 @@
                     <c:if test="${principal.user.id ne user.id}">
                         <c:choose>
                             <c:when test="${followCheck eq 1}">
-                                <button onClock="follow(false, ${user.id})" class="profile_edit_btn">팔로잉</button>
+                                <button onClick="follow(false, ${user.id})" class="profile_edit_btn">팔로잉</button>
                             </c:when>
                             <c:otherwise>
-                                <button onClock="follow(true, ${user.id})" class="profile_follow_btn">팔로우</button>
+                                <button onClick="follow(true, ${user.id})" class="profile_follow_btn">팔로우</button>
                             </c:otherwise>
                         </c:choose>
                     </c:if>
