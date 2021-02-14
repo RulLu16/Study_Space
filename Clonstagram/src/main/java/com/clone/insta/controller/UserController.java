@@ -63,7 +63,7 @@ public class UserController {
 
         Optional<User> oToUser = userRepository.findById(id);
         User user = oToUser.get();
-        //model.addAttribute("toUser", toUser);
+        model.addAttribute("user", user);
 
         // follow count
         int followCount = followRepository.countByFromUserId(user.getId());
@@ -81,5 +81,11 @@ public class UserController {
         model.addAttribute("followCheck", followCheck);
 
         return "user/profile";
+    }
+
+    @GetMapping("/user/edit/{id}")
+    public String userEdit(@PathVariable int id){
+
+        return "user/profile_edit";
     }
 }

@@ -1,5 +1,6 @@
 package com.clone.insta.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -17,9 +18,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String username;
+    @JsonIgnore
     private String password;
     private String name;
-    private String url;
+    private String website; // 홈페이지 주소
     private String bio; // 자기 소개
     private String email;
     private String phone;

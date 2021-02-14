@@ -6,12 +6,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Clonstagram</title>
+    <title>Clonstagrm</title>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
           rel="stylesheet">
     <link rel="shortcut icon" href="/images/favicon.ico">
     <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="/css/modal.css">
 </head>
 
 <body>
@@ -29,29 +28,34 @@
             <div class="profile__title">
                 <h1>${user.username}</h1>
                 <div id="follow_check">
-                    <c:choose>
-                        <c:when test="${followCheck eq  1}">
-                            <button onClick="follow(false, ${user.id})" class="profile_edit_btn">팔로잉</button>
-                        </c:when>
-                        <c:otherwise>
-                            <button onClick="follow(true. ${user.id})" class="profile_follow_btn">팔로우</button>
-                        </c:otherwise>
-                    </c:choose>
+                    <c:if test="${principal.user.id ne user.id}">
+                        <c:choose>
+                            <c:when test="${followCheck eq 1}">
+                                <button onClock="follow(false, ${user.id})" class="profile_edit_btn">팔로잉</button>
+                            </c:when>
+                            <c:otherwise>
+                                <button onClock="follow(true, ${user.id})" class="profile_follow_btn">팔로우</button>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:if>
                 </div>
-
-                <a href="edit-profile.html">
-                    <button class="profile_edit_btn">Edit Profile</button>
-                </a> <i class="fa fa-cog fa-lg"></i>
+                <c:if test="${principal.user.id eq user.id}">
+                    <a href="/user/edit/${principal.user.id}">
+                        <button class="profile_edit_btn">Edit Profile</button>
+                    </a><i class="fa fa-cog fa-lg"></i>
+                </c:if>
             </div>
             <ul class="profile__stats">
-                <li class="profile__stat"><span class="profile__stat-number">313</span> posts</li>
-                <li class="profile__stat"><span class="profile__stat-number">4,444</span> followers</li>
-                <li class="profile__stat"><span class="profile__stat-number">44</span> following</li>
+                <li class="profile__stat"><span class="profile__stat-number">313</span> 게시물</li>
+                <li class="profile__stat"><span class="profile__stat-number">4,444 </span><a href="/follow/follower/${user.id}">팔로워</a></li>
+                <li class="profile__stat"><span class="profile__stat-number">44 </span><a href="/follow/follow/${user.id}">팔로우</a></li>
             </ul>
-            <p class="profile__bio">
-                <span class="profile__fullname">${user.name }</span> ${user.bio }
-                <a href="${user.website}" class="profile__link">${user.website}</a>
-            </p>
+            <div class="profile__bio">
+                <p class="profile__fullname">${user.name }</p>
+                <p>${user.bio }</p>
+                <p><a href="${user.website}" class="profile__link">
+                    ${user.website}</a></p>
+            </div>
         </div>
     </header>
     <div class="profile__photo-grid">
@@ -157,7 +161,7 @@
 
 
 <%@ include file="../include/footer.jsp"%>
-<script src="/js/follow.js"></script>
+<script src="/js/profile.js"></script>
 
 <script>
     $(function() {
