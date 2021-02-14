@@ -31,32 +31,13 @@
                 <h1>serranoarevalo</h1>
                 <c:choose>
                     <c:when test="${followCheck eq 1}">
-                        <button onclick="follow(false)" class="profile_edit_btn">팔로잉</button>
+                        <button onclick="follow(false, ${user.id})" class="profile_edit_btn">팔로잉</button>
                         <!-- 이미 팔로우 한 상태 -->
                     </c:when>
                     <c:otherwise>
-                        <button onclick="follow(true)" class="follow_btn">팔로우</button>
+                        <button onclick="follow(true, ${user.id})" class="follow_btn">팔로우</button>
                     </c:otherwise>
                 </c:choose>
-
-                <script>
-                    function follow(check){
-                        let url ="/follow/${toUser.id}"
-                        if(check){
-                            fetch(url, {
-                                method: "POST"
-                            }).then(function(res){
-                                return res.text();
-                            }).then(function(res){
-                                if(result == "ok"){
-
-                                }
-                            });
-                        }else{
-
-                        }
-                    }
-                </script>
 
                 <a href="edit-profile.html">
                     <button>Edit Profile</button>
@@ -223,9 +204,12 @@
 </div>
 
 <%@ include file="../include/footer.jsp" %>
-<script src="/js/follow.js"></script>
+<script src="/js/profile.js"></script>
 
 <script>
+    let userId = ${user.id};
+    let principalId = ${principal.user.id};
+
     $(function() {
         //이미지 클릭시 업로드창 실행
         $('#profile_image').click(function() {

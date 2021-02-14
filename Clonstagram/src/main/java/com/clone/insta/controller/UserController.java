@@ -62,12 +62,20 @@ public class UserController {
         // id를 통해 유저 검색
 
         Optional<User> oToUser = userRepository.findById(id);
-        User toUser = oToUser.get();
-        model.addAttribute("toUser", toUser);
+        User user = oToUser.get();
+        //model.addAttribute("toUser", toUser);
+
+        // follow count
+        int followCount = followRepository.countByFromUserId(user.getId());
+        model.addAttribute("followCount", followCount);
+
+        // follower count
+        int followerCount = followRepository.countByToUserId(user.getId());
+        model.addAttribute("followerCount", followerCount);
 
         // follow check, 1 = folow, 0 = unfollow
-        User user = userDetail.getUser();
-        int followCheck = followRepository.countByFromUserIdAndToUserId(user.getId(), id);
+        User principal = userDetail.getUser();
+        int followCheck = followRepository.countByFromUserIdAndToUserId(principal.getId(), id);
 
         log.info("followCheck: " + followCheck);
         model.addAttribute("followCheck", followCheck);
