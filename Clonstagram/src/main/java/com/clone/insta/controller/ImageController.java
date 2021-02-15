@@ -21,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -99,5 +100,16 @@ public class ImageController {
         }
 
         return "redirect:/";
+    }
+
+    @GetMapping("/image/feed/scroll")
+    public @ResponseBody List<Image> imageFeedScroll(
+            @AuthenticationPrincipal MyUserDetail userDetail,
+            @PageableDefault(size = 3, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
+
+        Page<Image> pageImages = imageRepository.findImage(userDetail.getUser().getId(), pageable);
+        List<Image> images = pageImages.getContent();
+
+        return images;
     }
 }
