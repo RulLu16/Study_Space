@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Tag;
 import com.example.demo.entity.User;
 import com.example.demo.resource.UserResource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,5 +108,22 @@ public class UserController {
 
         return ResponseEntity.ok().build();
         //return result;
+    }
+
+    @GetMapping("/user/tag")
+    @ResponseBody
+    public List<Tag> getUserTag(@RequestBody Map<String, String> params){
+        String id = params.get("id");
+
+        return userService.getTag(Long.parseLong(id));
+    }
+
+    @PostMapping("/user/tag")
+    @ResponseBody
+    public List<Tag> addUserTag(@RequestBody Map<String, String> params){
+        String id = params.get("id");
+        String tags = params.get("tags");
+
+        return userService.addTag(Long.parseLong(id), tags);
     }
 }
